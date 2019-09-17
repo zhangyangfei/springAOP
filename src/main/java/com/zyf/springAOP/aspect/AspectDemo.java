@@ -1,8 +1,10 @@
 package com.zyf.springAOP.aspect;
 
+import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.AfterThrowing;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
@@ -16,25 +18,35 @@ public class AspectDemo {
 	@Pointcut("execution(* com.zyf.springAOP.service.UserService.printUserName(..))")
 	public void pointCut() {
 	}
-	// 通知-切点前方法
+	// 前置通知-切点前方法
 	@Before("pointCut()")
 	public void before() {
 		System.out.println("执行方法：before");
 	}
-	// 通知-切点后方法
+	// 后置通知-切点后方法
 	@After("pointCut()")
 	public void after() {
 		System.out.println("执行方法：after");
 	}
-	// 通知-切点返回后方法
+	// 事后返回通知-切点返回后方法
 	@AfterReturning("pointCut()")
 	public void afterReturning() {
 		System.out.println("执行方法：afterReturning");
 	}
-	// 通知-切点异常后方法
+	// 异常通知-切点异常后方法
 	@AfterThrowing("pointCut()")
 	public void afterThrowing() {
 		System.out.println("执行方法：afterThrowing");
+	}
+	
+	// 环绕通知
+	// 环绕通知使用时，@Before的方法是在pj.proceed()调用时，且是在回调原来方法之前执行。一些书籍说慎用springbootAOP中的环绕通知！
+	@Around("pointCut()")
+	public void around(ProceedingJoinPoint pj) throws Throwable{
+		System.out.println("执行方法：around...回调前");
+		pj.proceed();//回调目标对象的原有方法
+		
+		System.out.println("执行方法：around...回调后");
 	}
 	
 	/* 1.切面，@Aspect定义，所谓面，在这个面中可以定义流程中的各个元素:切点、通知。
