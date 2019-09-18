@@ -1,5 +1,6 @@
 package com.zyf.springAOP.aspect;
 
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -10,6 +11,8 @@ import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
+import com.zyf.springAOP.pojo.User;
+
 @Component // 切面需要被装配到IoC容器中
 @Aspect // @Aspect定义切面
 public class AspectDemo {
@@ -19,8 +22,17 @@ public class AspectDemo {
 	public void pointCut() {
 	}
 	// 前置通知-切点前方法
-	@Before("pointCut()")
-	public void before() {
+	/*
+	 * 获取参数方式一：【&& args(user)】。
+	 * 	注意：注解中的参数名称‘user’、befor方法中的参数名称，都必须和切点中的参数名称一致，否则报错
+	 * 获取参数方式二： 利用类JoinPoint,其getArgs()方法能获取目标对象的原有方法的参数列表
+	 *  注意：不是Joinpoint，而是 JoinPoint 
+	 */
+	@Before("pointCut() && args(user)")
+	public void before(JoinPoint point,User user) {
+		System.out.println("执行方法：before，user= " + user);
+		Object[] paraList  =  point.getArgs();
+		System.out.println("执行方法：before，参数= " + paraList);
 		System.out.println("执行方法：before");
 	}
 	// 后置通知-切点后方法
@@ -44,8 +56,12 @@ public class AspectDemo {
 	@Around("pointCut()")
 	public void around(ProceedingJoinPoint pj) throws Throwable{
 		System.out.println("执行方法：around...回调前");
-		pj.proceed();//回调目标对象的原有方法
-		
+		//目标对象的原有方法的参数列表
+		Object[] paraList = pj.getArgs();
+		User user = (User)paraList[0];
+		System.out.println("执行方法：around...参数=" + paraList);
+		//回调目标对象的原有方法
+		pj.proceed();
 		System.out.println("执行方法：around...回调后");
 	}
 	
