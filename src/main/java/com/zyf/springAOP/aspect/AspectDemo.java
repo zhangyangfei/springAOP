@@ -18,7 +18,7 @@ import com.zyf.springAOP.pojo.User;
 public class AspectDemo {
 	// 定义切点
 	// 语法：@Pointcut("execution(* 目标对象.连接点(..))")，*和目标对象之间要一个空格，否则报错
-	@Pointcut("execution(* com.zyf.springAOP.service.UserService.printUserName(..))")
+	@Pointcut("execution(* com.zyf.springAOP.service.UserServiceImpl.printUserName(..))")
 	public void pointCut() {
 	}
 	// 前置通知-切点前方法

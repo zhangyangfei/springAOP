@@ -10,7 +10,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.zyf.springAOP.config.BeanConfig;
 import com.zyf.springAOP.pojo.User;
+import com.zyf.springAOP.service.AspectOrderService;
 import com.zyf.springAOP.service.UserService;
+import com.zyf.springAOP.service.UserServiceImpl;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -18,20 +20,27 @@ public class SpringAopApplicationTests {
 
 	@Test
 	public void contextLoads() {
-		// beanTest();
-		aspectTest();
 	}
 
 	@Autowired
+	private AspectOrderService aspectOrderService;
+	@Test
+	public void aspectOrderTest() {
+		aspectOrderService.printOrderTest();
+	}
+	
+	@Autowired
 	private UserService userService;
-	void aspectTest() {
+//	@Test
+	public void aspectTest() {
 		User user = getUser();
 		user.setName("zyf");
 //		user =null;
 		userService.printUserName(user);
 	}
 
-	void beanTest() {
+//	@Test
+	public void beanTest() {
 		System.out.println(getUser());
 	}
 
